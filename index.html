@@ -53,7 +53,6 @@
       ng-show="selectedImage"
       ng-class="{ 'active': selectedImage }"
     >
-      <span class="close-button" ng-click="closeSelectedImage()">&times;</span>
       <img
         ng-src="{{selectedImage.url}}"
         class="img-fluid rounded-lg shadow-md"
@@ -65,8 +64,14 @@
         .module("imageBrowserApp", [])
         .controller("ImageController", function ($scope, $http) {
           $scope.images = [];
+          // Define default image URL
+          var defaultImageUrl = "https://picsum.photos/id/1/450/450";
+
           $scope.displayedRows = [];
-          $scope.selectedImage = null;
+          $scope.selectedImage = {
+            id: "default",
+            url: defaultImageUrl,
+          };
           $scope.imagesPerRow = 15;
           $scope.imagesPerPage = 2 * $scope.imagesPerRow;
           $scope.currentPage = 1;
@@ -112,14 +117,14 @@
               $scope.images.length / $scope.imagesPerPage
             );
           };
-
+          //Handle previous page button clicked event
           $scope.prevPage = function () {
             if ($scope.currentPage > 1) {
               $scope.currentPage--;
               $scope.updateDisplayedRows();
             }
           };
-
+          //Handle next page button clicked event
           $scope.nextPage = function () {
             if ($scope.currentPage < $scope.totalPages) {
               $scope.currentPage++;
